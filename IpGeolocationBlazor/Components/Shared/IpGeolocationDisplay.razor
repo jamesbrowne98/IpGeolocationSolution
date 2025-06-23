@@ -1,0 +1,28 @@
+﻿@using SharedModels
+@inject NavigationManager NavigationManager
+
+@if (Geolocation != null)
+{
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">IP Geolocation Details</h5>
+            <p class="card-text"><strong>IP:</strong> @Geolocation.Ip</p>
+            <p class="card-text"><strong>Type:</strong> @Geolocation.Type</p>
+            <p class="card-text"><strong>Continent:</strong> @Geolocation.ContinentName (@Geolocation.ContinentCode)</p>
+            <p class="card-text"><strong>Country:</strong> @Geolocation.CountryName (@Geolocation.CountryCode)</p>
+            <p class="card-text"><strong>Region:</strong> @Geolocation.RegionName (@Geolocation.RegionCode)</p>
+            <p class="card-text"><strong>City:</strong> @Geolocation.City</p>
+            <p class="card-text"><strong>Zip:</strong> @Geolocation.Zip</p>
+            <p class="card-text"><strong>Coordinates:</strong> @Geolocation.Latitude, @Geolocation.Longitude</p>
+        </div>
+    </div>
+}
+else
+{
+    <p>No geolocation data available.</p>
+}
+
+@code {
+    [Parameter]
+    public IpGeolocation? Geolocation { get; set; }
+}

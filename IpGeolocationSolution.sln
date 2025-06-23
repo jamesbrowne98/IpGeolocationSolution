@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36203.30 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IpGeolocationApi", "IpGeolocationApi\IpGeolocationApi.csproj", "{C8D0CF99-CAE2-471C-8EEE-630F1ADBCA32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IpGeolocationBlazor", "IpGeolocationBlazor\IpGeolocationBlazor.csproj", "{F0D45A7B-063D-43E7-AACD-9E83C3E15E32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedModels", "SharedModels\SharedModels.csproj", "{58B8998F-5360-48DA-A277-40D4BA5D3F72}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C8D0CF99-CAE2-471C-8EEE-630F1ADBCA32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8D0CF99-CAE2-471C-8EEE-630F1ADBCA32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8D0CF99-CAE2-471C-8EEE-630F1ADBCA32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8D0CF99-CAE2-471C-8EEE-630F1ADBCA32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0D45A7B-063D-43E7-AACD-9E83C3E15E32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0D45A7B-063D-43E7-AACD-9E83C3E15E32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0D45A7B-063D-43E7-AACD-9E83C3E15E32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0D45A7B-063D-43E7-AACD-9E83C3E15E32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58B8998F-5360-48DA-A277-40D4BA5D3F72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58B8998F-5360-48DA-A277-40D4BA5D3F72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58B8998F-5360-48DA-A277-40D4BA5D3F72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58B8998F-5360-48DA-A277-40D4BA5D3F72}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C024B45A-845B-408D-AAE1-986BFCB866C9}
+	EndGlobalSection
+EndGlobal

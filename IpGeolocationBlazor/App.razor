@@ -1,0 +1,35 @@
+﻿@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web  
+@using IpGeolocationBlazor.Components.Layout  
+@using Microsoft.AspNetCore.Routing
+
+<!DOCTYPE html>  
+<html lang="en">  
+
+<head>  
+    <meta charset="utf-8" />  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />  
+    <base href="/" />  
+    <link rel="stylesheet" href="@Assets["app.css"]" />  
+    <link rel="stylesheet" href="@Assets["IpGeolocationBlazor.styles.css"]" />  
+    <ImportMap />  
+      
+</head>  
+
+<body>
+    <Router AppAssembly="@typeof(App).Assembly">
+        <Found Context="routeData">
+            <RouteView RouteData="@routeData" DefaultLayout="typeof(IpGeolocationBlazor.Components.Layout.MainLayout)" />
+            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        </Found>
+        <NotFound>
+            <PageTitle>Not found</PageTitle>
+            <LayoutView Layout="typeof(IpGeolocationBlazor.Components.Layout.MainLayout)">
+                <p>Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </NotFound>
+    </Router>
+    <script src="_framework/blazor.server.js"></script>  
+</body>  
+
+</html>

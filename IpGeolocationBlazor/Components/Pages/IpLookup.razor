@@ -1,0 +1,88 @@
+﻿@page "/iplookup"
+@using IpGeolocationBlazor.Services
+@using SharedModels
+@inject IIpGeolocationClient GeolocationClient
+@inject NavigationManager NavigationManager
+
+<h3>IP Geolocation Lookup</h3>
+
+@if (isLoading)
+{
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+}
+else if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @errorMessage
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <h4>Look Up an IP Address</h4>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Enter IP address" @bind="ipAddress" />
+            <button class="btn btn-primary" type="button" @onclick="LookupIp">Lookup</button>
+        </div>
+        @if (geolocation != null)
+        {
+            <IpGeolocationDisplay Geolocation="geolocation" />
+        }
+    </div>
+    <div class="col-md-6">
+        <h4>Your Current Location</h4>
+        @if (currentGeolocation != null)
+        {
+            <IpGeolocationDisplay Geolocation="currentGeolocation" />
+        }
+    </div>
+</div>
+
+@code {
+    private string ipAddress = "";
+    private IpGeolocation? geolocation;
+    private IpGeolocation? currentGeolocation;
+    private bool isLoading = false;
+    private string? errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+        try
+        {
+            currentGeolocation = await GeolocationClient.GetCurrentGeolocationAsync();
+        }
+        catch (Exception)
+        {
+            errorMessage = "Failed to retrieve your geolocation.";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task LookupIp()
+    {
+        isLoading = true;
+        errorMessage = "";
+        try
+        {
+            geolocation = await GeolocationClient.GetGeolocationAsync(ipAddress);
+            if (geolocation == null)
+            {
+                errorMessage = "Invalid IP address or no data available.";
+            }
+        }
+        catch (Exception)
+        {
+            errorMessage = "An error occurred while fetching geolocation data.";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+}
