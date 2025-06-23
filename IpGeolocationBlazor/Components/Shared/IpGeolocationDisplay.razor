@@ -1,26 +1,68 @@
 ﻿@using SharedModels
-@inject NavigationManager NavigationManager
 
-@if (Geolocation != null)
-{
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">IP Geolocation Details</h5>
-            <p class="card-text"><strong>IP:</strong> @Geolocation.Ip</p>
-            <p class="card-text"><strong>Type:</strong> @Geolocation.Type</p>
-            <p class="card-text"><strong>Continent:</strong> @Geolocation.ContinentName (@Geolocation.ContinentCode)</p>
-            <p class="card-text"><strong>Country:</strong> @Geolocation.CountryName (@Geolocation.CountryCode)</p>
-            <p class="card-text"><strong>Region:</strong> @Geolocation.RegionName (@Geolocation.RegionCode)</p>
-            <p class="card-text"><strong>City:</strong> @Geolocation.City</p>
-            <p class="card-text"><strong>Zip:</strong> @Geolocation.Zip</p>
-            <p class="card-text"><strong>Coordinates:</strong> @Geolocation.Latitude, @Geolocation.Longitude</p>
-        </div>
+<div class="card geolocation-card">
+    <div class="card-body">
+        <h5 class="card-title">Geolocation Details</h5>
+        @if (Geolocation == null)
+        {
+            <p class="card-text text-danger">Geolocation data is null.</p>
+        }
+        else
+        {
+            <p class="card-text">
+                <strong>IP:</strong> @(Geolocation.Ip ?? "N/A")<br />
+                <strong>Type:</strong> @(Geolocation.Type ?? "N/A")<br />
+                <strong>Continent:</strong> @(Geolocation.ContinentCode ?? "N/A") - @(Geolocation.ContinentName ?? "N/A")<br />
+                <strong>Country:</strong> @(Geolocation.CountryCode ?? "N/A") - @(Geolocation.CountryName ?? "N/A")<br />
+                <strong>Region:</strong> @(Geolocation.RegionCode ?? "N/A") - @(Geolocation.RegionName ?? "N/A")<br />
+                <strong>City:</strong> @(Geolocation.City ?? "N/A")<br />
+                <strong>Zip:</strong> @(Geolocation.Zip ?? "N/A")<br />
+                <strong>Latitude:</strong> @(Geolocation.Latitude != 0 ? Geolocation.Latitude.ToString() : "N/A")<br />
+                <strong>Longitude:</strong> @(Geolocation.Longitude != 0 ? Geolocation.Longitude.ToString() : "N/A")<br />
+                @if (Geolocation.Location != null)
+                {
+                    <strong>Capital:</strong> 
+                    @(Geolocation.Location.Capital ?? "N/A")
+            
+                    <br />
+                    <strong>EU Member:</strong>
+ 
+                    @(Geolocation.Location.IsEu ? "Yes" : "No")
+            
+                    <br />
+                    @if (Geolocation.Location.Languages != null && Geolocation.Location.Languages.Any())
+                    {
+                        <strong>Languages:</strong>
+                        <ul>
+                            @foreach (var language in Geolocation.Location.Languages)
+                            {
+                                <li>@(language.Name ?? "N/A") (@(language.Native ?? "N/A"))</li>
+                            }
+                        </ul>
+                    }
+                    <strong>Country Flag:</strong> 
+                    @(Geolocation.Location.CountryFlag ?? "N/A")
+            
+                    <br />
+                    <strong>Flag Emoji:</strong>
+ 
+                    @(Geolocation.Location.CountryFlagEmoji ?? "N/A")
+            
+                    <br />
+                    <strong>Calling Code:</strong>
+ 
+                    @(Geolocation.Location.CallingCode ?? "N/A")
+            
+                    <br />
+                }
+                else
+                {
+                <p>Location data is unavailable.</p>
+            }
+            </p>
+        }
     </div>
-}
-else
-{
-    <p>No geolocation data available.</p>
-}
+</div>
 
 @code {
     [Parameter]

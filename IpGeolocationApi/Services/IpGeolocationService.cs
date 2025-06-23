@@ -31,6 +31,7 @@ public class IpGeolocationService : IIpGeolocationService
         var url = $"https://api.ipstack.com/{ipAddress}?access_key={_settings.ApiKey}";
         try
         {
+            Log.Information("Calling ipstack API: {Url}", url.Replace(_settings.ApiKey, "REDACTED"));
             var response = await _httpClient.GetAsync(url);
             var content = await response.Content.ReadAsStringAsync();
             Log.Information("ipstack API Response for {IpAddress}: {Content}", ipAddress, content);
@@ -41,6 +42,7 @@ public class IpGeolocationService : IIpGeolocationService
                 Log.Warning("Failed to deserialize ipstack response for {IpAddress}", ipAddress);
                 return null;
             }
+            Log.Information("Deserialized IpGeolocation for {IpAddress}: {@Result}", ipAddress, result);
             return result;
         }
         catch (HttpRequestException ex)
@@ -60,6 +62,7 @@ public class IpGeolocationService : IIpGeolocationService
         var url = $"https://api.ipstack.com/check?access_key={_settings.ApiKey}";
         try
         {
+            Log.Information("Calling ipstack API: {Url}", url.Replace(_settings.ApiKey, "REDACTED"));
             var response = await _httpClient.GetAsync(url);
             var content = await response.Content.ReadAsStringAsync();
             Log.Information("ipstack API Response for current: {Content}", content);
@@ -70,6 +73,7 @@ public class IpGeolocationService : IIpGeolocationService
                 Log.Warning("Failed to deserialize ipstack response for current");
                 return null;
             }
+            Log.Information("Deserialized IpGeolocation for current: {@Result}", result);
             return result;
         }
         catch (HttpRequestException ex)

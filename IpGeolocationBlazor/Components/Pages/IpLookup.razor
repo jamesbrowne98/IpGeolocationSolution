@@ -1,4 +1,5 @@
 ﻿@page "/iplookup"
+@using IpGeolocationBlazor.Components.Shared
 @using IpGeolocationBlazor.Services
 @using SharedModels
 @inject IIpGeolocationClient GeolocationClient
@@ -23,21 +24,34 @@ else if (!string.IsNullOrEmpty(errorMessage))
     <div class="col-md-6">
         <h4>Look Up an IP Address</h4>
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Enter IP address" @bind="ipAddress" />
+            <input type="text" class="form-control" placeholder="Enter IP address" @bind="ipAddress" @bind:event="oninput" />
             <button class="btn btn-primary" type="button" @onclick="LookupIp">Lookup</button>
         </div>
-        @if (geolocation != null)
+        @if (geolocation != null && !string.IsNullOrEmpty(geolocation.Ip))
         {
             <IpGeolocationDisplay Geolocation="geolocation" />
         }
-    </div>
-    <div class="col-md-6">
-        <h4>Your Current Location</h4>
-        @if (currentGeolocation != null)
+        else if (geolocation != null)
         {
-            <IpGeolocationDisplay Geolocation="currentGeolocation" />
+            <div class="alert alert-warning">No geolocation data available for the provided IP.</div>
         }
     </div>
+<div class="col-md-6">
+    <h4>Your Current Location</h4>
+    @if (currentGeolocation != null && !string.IsNullOrEmpty(currentGeolocation.Ip))
+    {
+        <p>Debug: Rendering @currentGeolocation.City (IP: @currentGeolocation.Ip)</p>
+        <IpGeolocationDisplay Geolocation="currentGeolocation" />
+    }
+    else if (currentGeolocation != null)
+    {
+        <div class="alert alert-warning">Unable to retrieve your current location.</div>
+    }
+    else
+    {
+        <div class="alert alert-info">Geolocation data not loaded yet.</div>
+    }
+</div>
 </div>
 
 @code {
@@ -53,36 +67,46 @@ else if (!string.IsNullOrEmpty(errorMessage))
         try
         {
             currentGeolocation = await GeolocationClient.GetCurrentGeolocationAsync();
+            Serilog.Log.Information("CurrentGeolocation: {@Geolocation}", currentGeolocation);
+            if (currentGeolocation == null || string.IsNullOrEmpty(currentGeolocation.Ip))
+            {
+                errorMessage = "Failed to retrieve valid geolocation data.";
+            }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            errorMessage = "Failed to retrieve your geolocation.";
+            errorMessage = $"Failed to retrieve geolocation: {ex.Message}";
+            Serilog.Log.Error(ex, "Error in OnInitializedAsync");
         }
         finally
         {
             isLoading = false;
+            StateHasChanged();
         }
     }
 
     private async Task LookupIp()
     {
         isLoading = true;
-        errorMessage = "";
+        errorMessage = null;
         try
         {
             geolocation = await GeolocationClient.GetGeolocationAsync(ipAddress);
-            if (geolocation == null)
+            Serilog.Log.Information("Geolocation for {IpAddress}: {@Geolocation}", ipAddress, geolocation);
+            if (geolocation == null || string.IsNullOrEmpty(geolocation.Ip))
             {
                 errorMessage = "Invalid IP address or no data available.";
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            errorMessage = "An error occurred while fetching geolocation data.";
+            errorMessage = $"Error fetching geolocation: {ex.Message}";
+            Serilog.Log.Error(ex, "Error in LookupIp");
         }
         finally
         {
             isLoading = false;
+            StateHasChanged();
         }
     }
 }
