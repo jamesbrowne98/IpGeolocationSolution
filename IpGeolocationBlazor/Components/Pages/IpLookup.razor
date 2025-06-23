@@ -5,12 +5,14 @@
 @inject IIpGeolocationClient GeolocationClient
 @inject NavigationManager NavigationManager
 
-<h3>IP Geolocation Lookup</h3>
+<h3 class="text-center mb-4">IP Geolocation Lookup</h3>
 
 @if (isLoading)
 {
-    <div class="spinner-border" role="status">
-        <span class="visually-hidden">Loading...</span>
+    <div class="d-flex justify-content-center my-4">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
     </div>
 }
 else if (!string.IsNullOrEmpty(errorMessage))
@@ -20,38 +22,46 @@ else if (!string.IsNullOrEmpty(errorMessage))
     </div>
 }
 
-<div class="row">
+<div class="row g-4">
     <div class="col-md-6">
-        <h4>Look Up an IP Address</h4>
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Enter IP address" @bind="ipAddress" @bind:event="oninput" />
-            <button class="btn btn-primary" type="button" @onclick="LookupIp">Lookup</button>
+        <div class="card shadow-sm rounded">
+            <div class="card-body">
+                <h4 class="card-title">Look Up an IP Address</h4>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Enter IP address" @bind="ipAddress" @bind:event="oninput" />
+                    <button class="btn btn-primary" type="button" @onclick="LookupIp">Lookup</button>
+                </div>
+                @if (geolocation != null && !string.IsNullOrEmpty(geolocation.Ip))
+                {
+                    <IpGeolocationDisplay Geolocation="geolocation" />
+                }
+                else if (geolocation != null)
+                {
+                    <div class="alert alert-warning">No geolocation data available for the provided IP.</div>
+                }
+            </div>
         </div>
-        @if (geolocation != null && !string.IsNullOrEmpty(geolocation.Ip))
-        {
-            <IpGeolocationDisplay Geolocation="geolocation" />
-        }
-        else if (geolocation != null)
-        {
-            <div class="alert alert-warning">No geolocation data available for the provided IP.</div>
-        }
     </div>
-<div class="col-md-6">
-    <h4>Your Current Location</h4>
-    @if (currentGeolocation != null && !string.IsNullOrEmpty(currentGeolocation.Ip))
-    {
-        <p>Debug: Rendering @currentGeolocation.City (IP: @currentGeolocation.Ip)</p>
-        <IpGeolocationDisplay Geolocation="currentGeolocation" />
-    }
-    else if (currentGeolocation != null)
-    {
-        <div class="alert alert-warning">Unable to retrieve your current location.</div>
-    }
-    else
-    {
-        <div class="alert alert-info">Geolocation data not loaded yet.</div>
-    }
-</div>
+
+    <div class="col-md-6">
+        <div class="card shadow-sm rounded">
+            <div class="card-body">
+                <h4 class="card-title">Your Current Location</h4>
+                @if (currentGeolocation != null && !string.IsNullOrEmpty(currentGeolocation.Ip))
+                {
+                    <IpGeolocationDisplay Geolocation="currentGeolocation" />
+                }
+                else if (currentGeolocation != null)
+                {
+                    <div class="alert alert-warning">Unable to retrieve your current location.</div>
+                }
+                else
+                {
+                    <div class="alert alert-info">Geolocation data not loaded yet.</div>
+                }
+            </div>
+        </div>
+    </div>
 </div>
 
 @code {
@@ -85,12 +95,13 @@ else if (!string.IsNullOrEmpty(errorMessage))
         }
     }
 
-    private async Task LookupIp()
-    {
+    public async Task LookupIp()
+    {   
+        Serilog.Log.Information("Starting IP lookup...");
         isLoading = true;
-        errorMessage = null;
         try
         {
+            Console.WriteLine("Calling GetGeolocationAsync for IP: " + ipAddress);
             geolocation = await GeolocationClient.GetGeolocationAsync(ipAddress);
             Serilog.Log.Information("Geolocation for {IpAddress}: {@Geolocation}", ipAddress, geolocation);
             if (geolocation == null || string.IsNullOrEmpty(geolocation.Ip))
@@ -101,7 +112,7 @@ else if (!string.IsNullOrEmpty(errorMessage))
         catch (Exception ex)
         {
             errorMessage = $"Error fetching geolocation: {ex.Message}";
-            Serilog.Log.Error(ex, "Error in LookupIp");
+            Serilog.Log.Error(ex, "Error in LookupIp for IP: {IpAddress}", ipAddress);
         }
         finally
         {
