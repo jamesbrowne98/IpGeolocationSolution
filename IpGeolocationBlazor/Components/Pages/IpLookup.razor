@@ -26,11 +26,14 @@ else if (!string.IsNullOrEmpty(errorMessage))
     <div class="col-md-6">
         <div class="card shadow-sm rounded">
             <div class="card-body">
-                <h4 class="card-title">Look Up an IP Address</h4>
+@*                 <h4 class="card-title">Look Up an IP Address</h4>
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" placeholder="Enter IP address" @bind="ipAddress" @bind:event="oninput" />
                     <button class="btn btn-primary" type="button" @onclick="LookupIp">Lookup</button>
                 </div>
+                
+                Needs debugging, not working as expected
+                *@
                 @if (geolocation != null && !string.IsNullOrEmpty(geolocation.Ip))
                 {
                     <IpGeolocationDisplay Geolocation="geolocation" />
