@@ -1,0 +1,227 @@
+IpGeolocationSolution
+
+Overview
+
+The IpGeolocationSolution is a .NET 9 Blazor Server application designed to retrieve and display geolocation data for IP addresses using the ipstack API. The solution consists of two projects: a Blazor Server frontend (IpGeolocationBlazor) for user interaction and an ASP.NET Core Web API (IpGeolocationApi) for handling backend requests to ipstack. The app allows users to view their current location based on their IP address and look up geolocation details for any valid IP address.
+
+Features
+
+
+
+
+
+Current Location Display: Automatically fetches and displays the user’s geolocation (e.g., city, country) on page load.
+
+
+
+IP Address Lookup: Users can input an IP address to retrieve its geolocation details (currently under development to fix button interactivity).
+
+
+
+Responsive UI: Built with Bootstrap for a clean, user-friendly interface.
+
+
+
+Error Handling: Displays user-friendly error messages for invalid inputs or API failures.
+
+
+
+Logging: Uses Serilog for detailed server-side logging to aid debugging.
+
+Prerequisites
+
+
+
+
+
+.NET 9 SDK
+
+
+
+Visual Studio 2022 or later (with ASP.NET and web development workload)
+
+
+
+An ipstack API key (free tier available at ipstack)
+
+Setup Instructions
+
+
+
+
+
+Clone the Repository:
+
+git clone https://github.com/jamesbrowne98/IpGeolocationSolution.git
+cd IpGeolocationSolution
+
+
+
+Configure the API Key:
+
+
+
+
+
+Open IpGeolocationApi/appsettings.json.
+
+
+
+Replace "YOUR_IPSTACK_API_KEY" with your ipstack API key:
+
+"IpstackSettings": {
+  "ApiKey": "YOUR_IPSTACK_API_KEY"
+}
+
+
+
+Trust the Development Certificate:
+
+
+
+
+
+Run the following command to ensure HTTPS works:
+
+dotnet dev-certs https --trust
+
+
+
+Run the Projects:
+
+
+
+
+
+Option 1: Command Line
+
+
+
+
+
+Start the API:
+
+cd IpGeolocationApi
+dotnet run --project IpGeolocationApi.csproj
+
+
+
+Start the Blazor app in a new terminal:
+
+cd IpGeolocationBlazor
+dotnet run --project IpGeolocationBlazor.csproj
+
+
+
+Access the app at `[invalid url, do not cite]
+
+
+
+Option 2: Visual Studio
+
+
+
+
+
+Open IpGeolocationSolution.sln in Visual Studio.
+
+
+
+Set both IpGeolocationApi and IpGeolocationBlazor as startup projects (right-click solution > Set Startup Projects > Multiple startup projects).
+
+
+
+Press F5 to run.
+
+
+
+Usage:
+
+
+
+
+
+Navigate to `[invalid url, do not cite] to view the app.
+
+
+
+The "Your Current Location" section displays your geolocation on load.
+
+
+
+Enter an IP address (e.g., 8.8.8.8) in the input field and click "Lookup" (note: button functionality is under development).
+
+Project Structure
+
+
+
+
+
+IpGeolocationApi: ASP.NET Core Web API project that handles requests to the ipstack API.
+
+
+
+IpGeolocationBlazor: Blazor Server frontend for displaying geolocation data.
+
+
+
+SharedModels: Shared library containing data models used by both projects.
+
+Known Issues
+
+
+
+
+
+The "Lookup" button for IP address searches is not responding due to a WebSocket connection issue. This is being debugged by ensuring proper SignalR configuration and port alignment.
+
+Future Improvements
+
+
+
+
+
+Fix the WebSocket issue to enable IP lookup functionality.
+
+
+
+Enhance the UI with additional styling and animations.
+
+
+
+Add input validation for IP addresses.
+
+
+
+Implement caching for API responses to improve performance.
+
+Technologies Used
+
+
+
+
+
+.NET 9
+
+
+
+
+Blazor Server
+
+
+
+ASP.NET Core Web API
+
+
+
+Bootstrap
+
+
+
+Serilog
+
+
+
+ipstack API
+
+Contact
